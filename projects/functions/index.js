@@ -7,12 +7,14 @@
  1.2: Функция должна возвращать аргумент, переданный ей в качестве параметра
 
  Пример:
-   returnFirstArgument(10) вернет 10
-   returnFirstArgument('привет') вернет `привет`
+	 returnFirstArgument(10) вернет 10
+	 returnFirstArgument('привет') вернет `привет`
 
  Другими словами: функция должна возвращать в неизменном виде то, что поступает ей на вход
  */
-function returnFirstArgument(value) {}
+function returnFirstArgument(value) {
+  return value;
+}
 
 /*
  Задание 2:
@@ -20,15 +22,17 @@ function returnFirstArgument(value) {}
  2.1: Функция должна возвращать сумму переданных аргументов
 
  Пример:
-   sumWithDefaults(10, 20) вернет 30
-   sumWithDefaults(2, 4) вернет 6
+	 sumWithDefaults(10, 20) вернет 30
+	 sumWithDefaults(2, 4) вернет 6
 
  2.2 *: Значение по умолчанию для второго аргумента должно быть равно 100
 
  Пример:
-   sumWithDefaults(10) вернет 110
+	 sumWithDefaults(10) вернет 110
  */
-function sumWithDefaults(a, b) {}
+function sumWithDefaults(a, b = 100) {
+  return a + b;
+}
 
 /*
  Задание 3:
@@ -36,9 +40,11 @@ function sumWithDefaults(a, b) {}
  Функция должна принимать другую функцию и возвращать результат вызова этой функции
 
  Пример:
-   returnFnResult(() => 'привет') вернет 'привет'
+	 returnFnResult(() => 'привет') вернет 'привет'
  */
-function returnFnResult(fn) {}
+function returnFnResult(fn) {
+  return fn();
+}
 
 /*
  Задание 4:
@@ -47,16 +53,32 @@ function returnFnResult(fn) {}
  При вызове функции F, переданное ранее число должно быть увеличено на единицу и возвращено из F
 
  Пример:
-   var f = returnCounter();
-   console.log(f()); // выведет 1
-   console.log(f()); // выведет 2
-   
-   f = returnCounter(10);
-   console.log(f()); // выведет 11
-   console.log(f()); // выведет 12
-   console.log(f()); // выведет 13
+	 var f = returnCounter();
+	 console.log(f()); // выведет 1
+	 console.log(f()); // выведет 2
+	 
+	 f = returnCounter(10);
+	 console.log(f()); // выведет 11
+	 console.log(f()); // выведет 12
+	 console.log(f()); // выведет 13
  */
-function returnCounter(number) {}
+function returnCounter(number = 0) {
+  return () => ++number;
+  //Что-то какая-то дичь где будет храниться число как в примерах выше? сейчас это просто вернет функцию целиком
+}
+
+// Вот так скорее можно решить это задание
+/*
+let startNumber = 0
+function returnCounter(number = startNumber) {
+    startNumber = ++number
+    return startNumber
+}
+
+returnCounter(10)
+returnCounter()
+returnCounter()
+ */
 
 /*
  Задание 5 *:
@@ -65,9 +87,11 @@ function returnCounter(number) {}
  Количество переданных аргументов заранее неизвестно
 
  Пример:
-   returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
+	 returnArgumentsArray(1, 2, 3) вернет [1, 2, 3]
  */
-function returnArgumentsArray() {}
+function returnArgumentsArray(...args) {
+  return args;
+}
 
 /*
  Задание 6 *:
@@ -76,15 +100,17 @@ function returnArgumentsArray() {}
  Функция должна привязать переданные аргументы к функции F и вернуть получившуюся функцию
 
  Пример:
-   function sum(a, b) {
-     return a + b;
-   }
+	 function sum(a, b) {
+		 return a + b;
+	 }
 
-   var newSum = bindFunction(sum, 2, 4);
+	 var newSum = bindFunction(sum, 2, 4);
 
-   console.log(newSum()) выведет 6
+	 console.log(newSum()) выведет 6
  */
-function bindFunction(fn, ...args) {}
+function bindFunction(fn, ...args) {
+  return () => fn(...args);
+}
 
 export {
   returnFirstArgument,
