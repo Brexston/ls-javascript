@@ -7,9 +7,18 @@
  Посмотрите как работает forEach и повторите это поведение для массива, который будет передан в параметре array
 
  Пример:
-   forEach([1, 2, 3], (el) => console.log(el))
+	 forEach([1, 2, 3], (el) => console.log(el))
  */
-function forEach(array, fn) {}
+function forEach(array, fn) {
+  // Почему то так тесты не проходит, это же равнозначная запись?
+  // for(let i in array) {
+  //     fn(array[i],i, array)
+  // }
+
+  for (let i = 0; i < array.length; i++) {
+    fn(array[i], i, array);
+  }
+}
 
 /*
  Задание 2:
@@ -18,9 +27,22 @@ function forEach(array, fn) {}
  Посмотрите как работает map и повторите это поведение для массива, который будет передан в параметре array
 
  Пример:
-   map([1, 2, 3], (el) => el ** 2) // [1, 4, 9]
+	 map([1, 2, 3], (el) => el ** 2) // [1, 4, 9]
  */
-function map(array, fn) {}
+function map(array, fn) {
+  // Почему то так тесты не проходит, это же равнозначная запись?
+  // let newArray = []
+  // for(let i in newArray) {
+  //   newArray[i] = fn(array[i], i, array)
+  // }
+  // return newArray
+
+  const newArray = [];
+  for (let i = 0; i < array.length; i++) {
+    newArray[i] = fn(array[i], i, array);
+  }
+  return newArray;
+}
 
 /*
  Задание 3:
@@ -29,9 +51,17 @@ function map(array, fn) {}
  Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
 
  Пример:
-   reduce([1, 2, 3], (all, current) => all + current) // 6
+	 reduce([1, 2, 3], (all, current) => all + current) // 6
  */
-function reduce(array, fn, initial) {}
+function reduce(array, fn, initial) {
+  const hasInitial = typeof initial !== 'undefined';
+  let prev = hasInitial ? initial : array[0];
+
+  for (let i = hasInitial ? 0 : 1; i < array.length; i++) {
+    prev = fn(prev, array[i], i, array);
+  }
+  return prev;
+}
 
 /*
  Задание 4:
@@ -39,9 +69,15 @@ function reduce(array, fn, initial) {}
  Функция должна перебрать все свойства объекта, преобразовать их имена в верхний регистр и вернуть в виде массива
 
  Пример:
-   upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
+	 upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
  */
-function upperProps(obj) {}
+function upperProps(obj) {
+  const upperCaseObj = [];
+  for (const i in obj) {
+    upperCaseObj.push(i.toUpperCase());
+  }
+  return upperCaseObj;
+}
 
 /*
  Задание 5 *:
@@ -50,10 +86,17 @@ function upperProps(obj) {}
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
 
  Пример:
-   const obj = createProxy({});
-   obj.foo = 2;
-   console.log(obj.foo); // 4
+	 const obj = createProxy({});
+	 obj.foo = 2;
+	 console.log(obj.foo); // 4
  */
-function createProxy(obj) {}
+function createProxy(obj) {
+  return new Proxy(obj, {
+    set(obj, key, value) {
+      obj[key] = value ** 2;
+      return true;
+    },
+  });
+}
 
 export { forEach, map, reduce, upperProps, createProxy };
