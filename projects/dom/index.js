@@ -12,7 +12,7 @@
  */
 function createDivWithText(text) {
   const div = document.createElement('div');
-  div.innerText = text;
+  div.textContent = text;
   return div;
 }
 
@@ -119,31 +119,30 @@ function deleteTextNodes(where) {
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 
-function deleteTextNodesRecursive(where) {
-  where.childNodes.forEach((item, index) => {
-    const element = where.childNodes[index];
-    if (item.nodeType === Element.TEXT_NODE) {
-      where.removeChild(element);
-    } else if (item.nodeType === Element.ELEMENT_NODE) {
-      deleteTextNodesRecursive(element);
-    }
-  });
-}
+// function deleteTextNodesRecursive(where) {
+//   where.childNodes.forEach((item, index) => {
+//     const element = where.childNodes[index];
+//     if (item.nodeType === Element.TEXT_NODE) {
+//       where.removeChild(element);
+//     } else if (item.nodeType === Element.ELEMENT_NODE) {
+//       deleteTextNodesRecursive(element);
+//     }
+//   });
+// }
 
 //не проходит тесты в любой записи, посмотрел решение и сделал как в нем и все равно не работает
 // Попробовал чисто в браузере и все точно также
-// function deleteTextNodesRecursive(where) {
-//     for (let i = 0; i < where.childNodes.length; i++) {
-//       const el = where.childNodes[i]
-//       if (el.nodeType === Element.TEXT_NODE) {
-//         where.removeChild(el)
-// 		i--;
-//       }
-//       else if(el.nodeType === Element.ELEMENT_NODE){
-//         deleteTextNodesRecursive(el)
-//       }
-//     }
-//   }
+function deleteTextNodesRecursive(where) {
+  for (let i = 0; i < where.childNodes.length; i++) {
+    const el = where.childNodes[i];
+    if (el.nodeType === Element.TEXT_NODE) {
+      where.removeChild(el);
+      i--;
+    } else if (el.nodeType === Element.ELEMENT_NODE) {
+      deleteTextNodesRecursive(el);
+    }
+  }
+}
 
 /*
  Задание 7 *:
