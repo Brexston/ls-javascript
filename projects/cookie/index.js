@@ -45,8 +45,66 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
-filterNameInput.addEventListener('input', function () {});
+function fillCookies() {
+  const allCookies = document.cookie.split('; ').reduce((prev, current) => {
+    const [name, value] = current.split('=');
+    prev[name] = value;
+    return prev;
+  }, {});
 
-addButton.addEventListener('click', () => {});
+  listTable.innerHTML = '';
+  for (const cookie of Object.keys(allCookies)) {
+    const html = `
+			<tr>
+				<th>${cookie}</th>
+				<th>${allCookies[cookie]}</th>
+				<th><button class="remove-btn">Удалить</th>
+			</tr>
+			`;
+    if (cookie) {
+      listTable.insertAdjacentHTML('beforeend', html);
+    }
+  }
+}
+fillCookies();
 
-listTable.addEventListener('click', (e) => {});
+//Удаляем cookie
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('remove-btn')) {
+    const nameCookie = e.target.parentNode.closest('tr').querySelector('th').textContent;
+    deleteCookie(nameCookie);
+  }
+});
+
+function deleteCookie(name) {
+  document.cookie = `${name}=;expires=` + new Date(0).toUTCString();
+  fillCookies();
+}
+
+//Поиск по кукам
+filterNameInput.addEventListener('input', function () {
+  const cookiesList = document.querySelectorAll('#list-table tbody th:first-child');
+  const searchQuery = this.value;
+  const regexp = new RegExp(searchQuery, 'gi');
+  let cityName = '';
+  cookiesList.forEach((item) => {
+    cityName = item.textContent;
+    if (cityName.search(regexp) === -1) {
+      item.parentNode.style.display = 'none';
+    } else {
+      item.parentNode.style.display = '';
+    }
+  });
+});
+
+addButton.addEventListener('click', () => {
+  if (addNameInput.value && addValueInput.value) {
+    document.cookie = `${addNameInput.value}=${addValueInput.value}`;
+    fillCookies();
+    addNameInput.value = null;
+    addValueInput.value = null;
+  }
+});
+
+// Не понял зачем нужен этот обработчик
+//listTable.addEventListener('click', (e) => {});
