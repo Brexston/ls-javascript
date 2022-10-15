@@ -101,6 +101,7 @@ addButton.addEventListener('click', () => {
   if (addNameInput.value && addValueInput.value) {
     document.cookie = `${addNameInput.value}=${addValueInput.value}`;
     fillCookies();
+    filterNameInput.dispatchEvent(new Event('input'));
     addNameInput.value = null;
     addValueInput.value = null;
   }
