@@ -45,31 +45,48 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
-function fillCookies() {
-  const allCookies = document.cookie.split('; ').reduce((prev, current) => {
-    const [name, value] = current.split('=');
-    prev[name] = value;
-    return prev;
-  }, {});
+const cookiesMap = getCookies();
+let filterValue = '';
+function getCookies() {
+  return document.cookie
+    .split('; ')
+    .filter(Boolean)
+    .map((cookie) => cookie.match(/^([^=]+)=(.+)/))
+    .reduce((obj, [, name, value]) => {
+      obj.set(name, value);
 
+      return obj;
+    }, new Map());
+}
+
+function fillCookies() {
+  const allCookies = getCookies();
+  console.log(allCookies);
   listTable.innerHTML = '';
-  for (const cookie of Object.keys(allCookies)) {
+
+  for (const [name, value] of cookiesMap) {
+    if (
+      filterValue &&
+      !name.toLowerCase().includes(filterValue.toLowerCase()) &&
+      !value.toLowerCase().includes(filterValue.toLowerCase())
+    ) {
+      continue;
+    }
     const html = `
 			<tr>
-				<th>${cookie}</th>
-				<th>${allCookies[cookie]}</th>
+				<th>${name}</th>
+				<th>${value}</th>
 				<th><button class="remove-btn">Удалить</th>
 			</tr>
 			`;
-    if (cookie) {
-      listTable.insertAdjacentHTML('beforeend', html);
-    }
+
+    listTable.insertAdjacentHTML('beforeend', html);
   }
 }
 fillCookies();
 
 //Удаляем cookie
-document.addEventListener('click', (e) => {
+listTable.addEventListener('click', (e) => {
   if (e.target.classList.contains('remove-btn')) {
     const nameCookie = e.target.parentNode.closest('tr').querySelector('th').textContent;
     deleteCookie(nameCookie);
@@ -77,35 +94,22 @@ document.addEventListener('click', (e) => {
 });
 
 function deleteCookie(name) {
+  cookiesMap.delete(name);
   document.cookie = `${name}=;expires=` + new Date(0).toUTCString();
   fillCookies();
 }
 
 //Поиск по кукам
 filterNameInput.addEventListener('input', function () {
-  const cookiesList = document.querySelectorAll('#list-table tbody th:first-child');
-  const searchQuery = this.value;
-  const regexp = new RegExp(searchQuery, 'gi');
-  let cityName = '';
-  cookiesList.forEach((item) => {
-    cityName = item.textContent;
-    if (cityName.search(regexp) === -1) {
-      item.parentNode.style.display = 'none';
-    } else {
-      item.parentNode.style.display = '';
-    }
-  });
+  filterValue = this.value;
+  fillCookies();
 });
 
 addButton.addEventListener('click', () => {
-  if (addNameInput.value && addValueInput.value) {
-    document.cookie = `${addNameInput.value}=${addValueInput.value}`;
-    fillCookies();
-    filterNameInput.dispatchEvent(new Event('input'));
-    addNameInput.value = null;
-    addValueInput.value = null;
-  }
-});
+  if (!addNameInput.value) return;
 
-// Не понял зачем нужен этот обработчик
-//listTable.addEventListener('click', (e) => {});
+  document.cookie = `${addNameInput.value}=${addValueInput.value}`;
+  cookiesMap.set(addNameInput.value, addValueInput.value);
+
+  fillCookies();
+});
