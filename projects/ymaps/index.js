@@ -6,6 +6,22 @@ window.onload = () => {
 
 function mapInit() {
   const ymaps = window.ymaps;
+  const reviews = [];
+  const html = `
+        <h3 class="review__title">Отзыв</h3>
+        <form>
+            <div class="review__input">
+                <input type="text" name="name" placeholder="Укажите ваше имя">
+            </div>
+            <div class="review__input">
+                <input type="text" name="place" placeholder="Укажите место">
+            </div>
+            <div class="review__input">
+                <textarea name="review" placeholder="Оставьте отзыв"></textarea>
+            </div>
+            <button class="review__submit">Добавить</button
+        </form>
+    `;
   ymaps.ready(() => {
     const myMap = new ymaps.Map('map', {
       center: [55.76, 37.65],
@@ -14,41 +30,48 @@ function mapInit() {
 
     myMap.events.add('click', function (e) {
       const coords = e.get('coords');
-      addPlacemark(coords);
+      openBalloon(coords, html);
     });
 
-    function addPlacemark(coords) {
-      const myPlacemark = new ymaps.Placemark(coords, {
-        balloonContentHeader: `<h3 class="review__title">Отзыв</h3>`,
-        balloonContentBody: `
-                    <div class="review__input">
-                        <input type="text" placeholder="Укажите ваше имя">
-                    </div>
-                    <div class="review__input">
-                        <input type="text" placeholder="Укажите место">
-                    </div>
-                    <div class="review__input">
-                        <textarea placeholder="Оставьте отзыв"> </textarea>
-                    </div>
-                `,
-        balloonContentFooter: `
-                    <button class="review__submit">Добавить</button
-                `,
+    async function openBalloon(coords, html) {
+      // const myPlacemark = new ymaps.Placemark(coords, {
+      //     balloonContentBody: `
+      //         <h3 class="review__title">Отзыв</h3>
+      //         <form>
+      //             <div class="review__input">
+      //                 <input type="text" name="name" placeholder="Укажите ваше имя">
+      //             </div>
+      //             <div class="review__input">
+      //                 <input type="text" name="place" placeholder="Укажите место">
+      //             </div>
+      //             <div class="review__input">
+      //                 <textarea name="review" placeholder="Оставьте отзыв"></textarea>
+      //             </div>
+      //             <button onclick="event.preventDefault();window.addNewReview(this.parentNode, ${coords})" class="review__submit">Добавить</button
+      //         </form>
+      //     `,
+      // });
+      //PlacemarkArray.push(myPlacemark)
+      //myMap.geoObjects.add(myPlacemark);
+      const myBalloon = myMap.balloon.open(coords, {
+        contentBody: html,
       });
-
-      myMap.geoObjects.add(myPlacemark);
-      myPlacemark.balloon.open();
-      myPlacemark.balloon.events.add('close', function (e) {
-        myMap.geoObjects.remove(myPlacemark);
-      });
+      console.log(myBalloon);
+      // myPlacemark.balloon.events.add('close', function (e) {
+      //     myMap.geoObjects.remove(myPlacemark);
+      // });
     }
 
-    // function test(myPlacemark) {
-
-    //     console.log(myPlacemark.balloon)
-    //     myPlacemark.balloon.events.add('click', function (e) {
-    //         alert('sdsd')
-    //     });
-    // }
+    window.addNewReview = function addNewReview(form, longitude, latitude) {
+      const review = {
+        longitude,
+        latitude,
+        name: form.elements.name.value,
+        place: form.elements.place.value,
+        review: form.elements.review.value,
+      };
+      reviews.push(review);
+      localStorage.reviews = JSON.stringify(reviews);
+    };
   });
 }
