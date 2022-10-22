@@ -20,22 +20,24 @@ function mapInit() {
 
     function openBalloon(coords) {
       myMap.balloon.open(coords, createHtml(coords));
+      console.log('open');
     }
 
     function createHtml(coordinates) {
+      console.log('createHtml');
       const html = `
       <div class="review">
         <div class="review__list">${fillReviews(coordinates)}</div>
         <h3 class="review__title">Отзыв</h3>
         <form data-coordinates="${coordinates}">
           <div class="review__input">
-            <input type="text" name="name" placeholder="Укажите ваше имя">
+            <input type="text" name="name" value="Степа" placeholder="Укажите ваше имя">
           </div>
           <div class="review__input">
-            <input type="text" name="place" placeholder="Укажите место">
+            <input type="text" name="place" value="Шашлычка" placeholder="Укажите место">
           </div>
           <div class="review__input">
-            <textarea name="review" placeholder="Оставьте отзыв"></textarea>
+            <textarea name="review" placeholder="Оставьте отзыв">Еыыыыыыыыыыы</textarea>
           </div>
           <button class="review__submit">Добавить</button
         </form>
@@ -56,7 +58,6 @@ function mapInit() {
     });
 
     function addPlacemark(coordinates, form) {
-      console.log(form);
       const myPlacemark = new ymaps.Placemark(coordinates.split(','), {
         balloonContentBody: form,
       });
@@ -67,10 +68,9 @@ function mapInit() {
       myMap.balloon.close();
     }
 
-    function addNewReview(form, longitude, latitude) {
+    function addNewReview(form, coordinates) {
       const review = {
-        longitude,
-        latitude,
+        coordinates: coordinates,
         name: form.elements.name.value,
         place: form.elements.place.value,
         review: form.elements.review.value,
@@ -80,9 +80,19 @@ function mapInit() {
     }
 
     function fillReviews(coordinates) {
-      console.log(coordinates);
-      console.log(localStorage.reviews);
-      return '';
+      const reviewsObj = JSON.parse(localStorage.getItem('reviews'));
+      let reviesHtml = '';
+      if (!reviewsObj) return;
+
+      for (const review of reviewsObj) {
+        console.log(coordinates);
+        console.log(review.coordinates);
+        if (coordinates === review.coordinates) {
+          reviesHtml += `<p><b>${review.name}</b>[${review.place}] <br> ${review.review}</p>`;
+        }
+      }
+      console.log(reviesHtml);
+      return reviesHtml;
     }
   });
 }
