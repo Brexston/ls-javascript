@@ -24,19 +24,22 @@ function mapInit() {
 
     function createHtml(coordinates) {
       const html = `
-			<h3 class="review__title">Отзыв</h3>
-			<form data-coordinates="${coordinates}">
-				<div class="review__input">
-					<input type="text" name="name" placeholder="Укажите ваше имя">
-				</div>
-				<div class="review__input">
-					<input type="text" name="place" placeholder="Укажите место">
-				</div>
-				<div class="review__input">
-					<textarea name="review" placeholder="Оставьте отзыв"></textarea>
-				</div>
-				<button class="review__submit">Добавить</button
-			</form>
+      <div class="review">
+        <div class="review__list">${fillReviews(coordinates)}</div>
+        <h3 class="review__title">Отзыв</h3>
+        <form data-coordinates="${coordinates}">
+          <div class="review__input">
+            <input type="text" name="name" placeholder="Укажите ваше имя">
+          </div>
+          <div class="review__input">
+            <input type="text" name="place" placeholder="Укажите место">
+          </div>
+          <div class="review__input">
+            <textarea name="review" placeholder="Оставьте отзыв"></textarea>
+          </div>
+          <button class="review__submit">Добавить</button
+        </form>
+      </div>
 	  		`;
       return html;
     }
@@ -47,12 +50,13 @@ function mapInit() {
         const coordinates = form.getAttribute('data-coordinates');
         form.addEventListener('submit', (e) => e.preventDefault());
         addNewReview(form, coordinates);
-        addPlacemark(coordinates);
+        addPlacemark(coordinates, createHtml(coordinates));
         closeBaloon();
       }
     });
 
     function addPlacemark(coordinates, form) {
+      console.log(form);
       const myPlacemark = new ymaps.Placemark(coordinates.split(','), {
         balloonContentBody: form,
       });
@@ -73,6 +77,12 @@ function mapInit() {
       };
       reviews.push(review);
       localStorage.reviews = JSON.stringify(reviews);
+    }
+
+    function fillReviews(coordinates) {
+      console.log(coordinates);
+      console.log(localStorage.reviews);
+      return '';
     }
   });
 }
