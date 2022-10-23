@@ -7,11 +7,21 @@ window.onload = () => {
 function mapInit() {
   const ymaps = window.ymaps;
   const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+  const placemarks = [];
   ymaps.ready(() => {
     const myMap = new ymaps.Map('map', {
       center: [55.76, 37.65],
       zoom: 9,
     });
+    const clusterer = new ymaps.Clusterer();
+    myMap.geoObjects.add(clusterer);
+
+    function showOnMap() {
+      for (const review of reviews) {
+        addPlacemark(review.coordinates, createHtml(review.coordinates));
+      }
+    }
+    showOnMap();
 
     myMap.events.add('click', function (e) {
       const coordinates = e.get('coords');
@@ -29,13 +39,13 @@ function mapInit() {
         <h3 class="review__title">Отзыв</h3>
         <form data-coordinates="${coordinates}">
           <div class="review__input">
-            <input type="text" name="name" value="Степа" placeholder="Укажите ваше имя">
+            <input type="text" name="name" placeholder="Укажите ваше имя">
           </div>
           <div class="review__input">
-            <input type="text" name="place" value="Шашлычка" placeholder="Укажите место">
+            <input type="text" name="place"  placeholder="Укажите место">
           </div>
           <div class="review__input">
-            <textarea name="review" placeholder="Оставьте отзыв">Еыыыыыыыыыыы</textarea>
+            <textarea name="review" placeholder="Оставьте отзыв"></textarea>
           </div>
           <button class="review__submit">Добавить</button
         </form>
@@ -57,10 +67,12 @@ function mapInit() {
 
     function addPlacemark(coordinates) {
       const myPlacemark = new ymaps.Placemark(coordinates.split(','));
-      myPlacemark.events.add('click', (e) => {
+      myPlacemark.events.add('click', () => {
         myPlacemark.properties.set('balloonContent', createHtml(coordinates));
       });
+      placemarks.push(myPlacemark);
       myMap.geoObjects.add(myPlacemark);
+      clusterer.add(placemarks);
     }
 
     function closeBaloon() {
@@ -87,12 +99,5 @@ function mapInit() {
       }
       return reviesHtml;
     }
-
-    function showOnMap() {
-      for (const review of reviews) {
-        addPlacemark(review.coordinates, createHtml(review.coordinates));
-      }
-    }
-    showOnMap();
   });
 }
