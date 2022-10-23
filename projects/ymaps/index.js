@@ -23,7 +23,6 @@ function mapInit() {
     }
 
     function createHtml(coordinates) {
-      console.log('createHtml');
       const html = `
       <div class="review">
         <div class="review__list">${fillReviews(coordinates)}</div>
@@ -57,8 +56,9 @@ function mapInit() {
     });
 
     function addPlacemark(coordinates) {
-      const myPlacemark = new ymaps.Placemark(coordinates.split(','), {
-        balloonContentBody: createHtml(coordinates),
+      const myPlacemark = new ymaps.Placemark(coordinates.split(','));
+      myPlacemark.events.add('click', (e) => {
+        myPlacemark.properties.set('balloonContent', createHtml(coordinates));
       });
       myMap.geoObjects.add(myPlacemark);
     }
@@ -79,7 +79,6 @@ function mapInit() {
     }
 
     function fillReviews(coordinates) {
-      console.log('fillReviews');
       let reviesHtml = '';
       for (const review of reviews) {
         if (coordinates === review.coordinates) {
