@@ -6,7 +6,7 @@ window.onload = () => {
 
 function mapInit() {
   const ymaps = window.ymaps;
-  const reviews = [];
+  const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
   ymaps.ready(() => {
     const myMap = new ymaps.Map('map', {
       center: [55.76, 37.65],
@@ -20,7 +20,6 @@ function mapInit() {
 
     function openBalloon(coords) {
       myMap.balloon.open(coords, createHtml(coords));
-      console.log('open');
     }
 
     function createHtml(coordinates) {
@@ -52,14 +51,14 @@ function mapInit() {
         const coordinates = form.getAttribute('data-coordinates');
         form.addEventListener('submit', (e) => e.preventDefault());
         addNewReview(form, coordinates);
-        addPlacemark(coordinates, createHtml(coordinates));
+        addPlacemark(coordinates);
         closeBaloon();
       }
     });
 
-    function addPlacemark(coordinates, form) {
+    function addPlacemark(coordinates) {
       const myPlacemark = new ymaps.Placemark(coordinates.split(','), {
-        balloonContentBody: form,
+        balloonContentBody: createHtml(coordinates),
       });
       myMap.geoObjects.add(myPlacemark);
     }
@@ -70,7 +69,7 @@ function mapInit() {
 
     function addNewReview(form, coordinates) {
       const review = {
-        coordinates: coordinates,
+        coordinates,
         name: form.elements.name.value,
         place: form.elements.place.value,
         review: form.elements.review.value,
@@ -80,19 +79,21 @@ function mapInit() {
     }
 
     function fillReviews(coordinates) {
-      const reviewsObj = JSON.parse(localStorage.getItem('reviews'));
+      console.log('fillReviews');
       let reviesHtml = '';
-      if (!reviewsObj) return;
-
-      for (const review of reviewsObj) {
-        console.log(coordinates);
-        console.log(review.coordinates);
+      for (const review of reviews) {
         if (coordinates === review.coordinates) {
           reviesHtml += `<p><b>${review.name}</b>[${review.place}] <br> ${review.review}</p>`;
         }
       }
-      console.log(reviesHtml);
       return reviesHtml;
     }
+
+    function showOnMap() {
+      for (const review of reviews) {
+        addPlacemark(review.coordinates, createHtml(review.coordinates));
+      }
+    }
+    showOnMap();
   });
 }
