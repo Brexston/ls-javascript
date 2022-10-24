@@ -13,7 +13,10 @@ function mapInit() {
       center: [55.76, 37.65],
       zoom: 9,
     });
-    const clusterer = new ymaps.Clusterer();
+    const clusterer = new ymaps.Clusterer({
+      groupByCoordinates: true,
+      clusterDisableClickZoom: true,
+    });
     myMap.geoObjects.add(clusterer);
 
     function showOnMap() {
@@ -28,8 +31,18 @@ function mapInit() {
       openBalloon(coordinates);
     });
 
-    function openBalloon(coords) {
-      myMap.balloon.open(coords, createHtml(coords));
+    async function openBalloon(coords) {
+      await myMap.balloon.open(coords, createHtml(coords));
+
+      // const form = document.querySelector('form')
+      // console.log(form)
+      // form.addEventListener('submit', (e) => {
+      //   e.preventDefault()
+      //   const coordinates = form.getAttribute('data-coordinates');
+      //   addNewReview(form, coordinates);
+      //   addPlacemark(coordinates);
+      //   closeBaloon();
+      // });
     }
 
     function createHtml(coordinates) {
@@ -66,7 +79,10 @@ function mapInit() {
     });
 
     function addPlacemark(coordinates) {
-      const myPlacemark = new ymaps.Placemark(coordinates.split(','));
+      const myPlacemark = new ymaps.Placemark(coordinates.split(','), {
+        balloonContentBody: createHtml(coordinates),
+      });
+
       myPlacemark.events.add('click', () => {
         myPlacemark.properties.set('balloonContent', createHtml(coordinates));
       });
