@@ -4,16 +4,29 @@
     <meta charset="UTF-8">
     <title><%= htmlWebpackPlugin.options.title %></title>
     <style>
-        body,
-        ::placeholder {
+        body {
+            margin: 0;
             font-family: Geneva, Arial, Helvetica, sans-serif;
         }
 
         .hidden {
             display: none !important;
         }
+        .review {
+            min-width: 250px;
+        }
+        .review__input {
+            margin-bottom: 10px;
+        }
+        input,textarea {
+            width: 90%;
+        }
+        .ymaps-2-1-79-b-cluster-tabs__menu {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
 </body>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 </html>
