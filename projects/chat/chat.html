@@ -1,0 +1,177 @@
+<div class="chat">
+    <div class="chat__left">
+        <div class="chat__profile">
+            <div class="chat__profile-userpic"></div>
+            <div class="chat__profile-name">Brexston</div>
+        </div>
+        <div class="chat__users">
+            <div class="chat__users-title">Все пользователи:</div>
+            <div class="chat__users-list">
+                <div class="chat__user">Brexston</div>
+                <div class="chat__user">smelykov</div>
+            </div>
+        </div>
+    </div>
+    <div class="chat__right">
+        <div class="chat__info">
+            <div class="chat__info-name">Чат</div>
+            <div class="chat__info-participant"><span>2</span> участника</div>
+        </div>
+        <div class="chat__message">
+            <div class="message">
+                <div class="message__text">Привет! <span>17:58</span></div>
+                <div class="message___img"></div>
+            </div>
+            <div class="message">
+                <div class="message__text">Приdsadsвет! <span>17:58</span></div>
+                <div class="message___img"></div>
+            </div>
+        </div>
+        <div class="chat__send">
+            <input class="chat__send-input" type="text" placeholder="Введите сообщение...">
+            <button class="chat__send-btn">Отправить</button>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    body {
+  margin: 0;
+  color: white;
+  overflow: hidden;
+  font-family: Verdana;
+  box-sizing: border-box;
+}
+
+.chat {
+  background: #17212B;
+  height: 100vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+}
+
+.chat__left {
+  padding: 30px 15px;
+}
+
+.chat__right {
+  background: #0E1621;
+  padding-left: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat__profile {
+  display: flex;
+  align-items: center;
+  padding-bottom: 30px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3333333333);
+  cursor: pointer;
+  color: #fff;
+}
+
+.chat__profile-userpic {
+  width: 46px;
+  height: 46px;
+  background-color: #5387C1;
+  background-image: url('data:image/svg+xml,%0A%3Csvg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="12" cy="7" r="5" stroke="white" stroke-width="2"/%3E%3Cpath d="M17 14H17.3517C18.8646 14 20.1408 15.1266 20.3285 16.6279L20.719 19.7519C20.8682 20.9456 19.9374 22 18.7344 22H5.26556C4.06257 22 3.1318 20.9456 3.28101 19.7519L3.67151 16.6279C3.85917 15.1266 5.13538 14 6.64835 14H7" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E%0A');
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.chat__users-title {
+  color: rgba(255, 255, 255, 0.3333333333);
+  margin-bottom: 24px;
+}
+
+.chat__user:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.chat__info {
+  background: #17212B;
+  padding: 13px 16px 9px;
+  font-weight: 300;
+}
+
+.chat__info-name {
+  line-height: 16px;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.chat__info-participant {
+  color: #7F91A4;
+  line-height: 14px;
+  font-size: 12px;
+}
+
+.chat__send {
+  display: flex;
+  align-items: center;
+  background: #17212B;
+  height: 54px;
+  padding: 0 12px;
+}
+
+.chat__send-input {
+  flex: 1 1;
+  height: 100%;
+  background: transparent;
+  border: 0;
+  color: #fff;
+}
+
+.chat__send-input:focus-visible {
+  border: 0;
+  outline: 0;
+}
+
+.chat__send-btn {
+  background: #5387C1;
+  border-radius: 5px;
+  line-height: 16px;
+  font-size: 14px;
+  color: #fff;
+  height: 28px;
+  padding: 0 21px;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+}
+
+.chat__message {
+  padding: 17px 10px;
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.chat__message .message {
+  background: #2B5279;
+  width: max-content;
+  padding: 8px 10px;
+  border-radius: 5px;
+  line-height: 16px;
+  font-size: 14px;
+  margin-bottom: 4px;
+  margin-left: auto;
+}
+
+.chat__message .message__text {
+  display: flex;
+}
+
+.chat__message .message__text span {
+  margin-left: 12px;
+  line-height: 16px;
+  font-size: 14px;
+  color: #658FB7;
+}
+</style>
