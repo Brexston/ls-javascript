@@ -5,7 +5,6 @@ export default class ListUsers {
 	}
 
 	buildHtml() {
-		console.log(this.listUsersArray);
 		this.listUsersArray.forEach((user) => {
 			const div = document.createElement('div');
 			div.classList.add('chat__user');

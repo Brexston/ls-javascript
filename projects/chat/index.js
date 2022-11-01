@@ -1,6 +1,8 @@
 import './chat.html';
 import NickName from './nickName';
 import ListUsers from './listUsers';
+import CountUsers from './countUsers';
+import SendMessage from './sendMessage';
 
 window.onload = () => {
 	init();
@@ -11,7 +13,9 @@ function init() {
 
 	const socketServerURI = 'ws://localhost:4000';
 	const controlNickName = new NickName();
-	const controllistUsers = new ListUsers();
+	const controlListUsers = new ListUsers();
+	const controlMessage = new SendMessage();
+	const controlCountUsers = new CountUsers();
 
 	const dom = {
 		loginBtn: document.querySelector('.c-popup__button button'),
@@ -26,19 +30,24 @@ function init() {
 			document.body.classList.remove('popup-opened');
 			const requestBody = {
 				event: 'login',
-				payload: { nickname: controlNickName.get() },
+				payload: {
+					nickname: controlNickName.get(),
+				},
 			};
 			ws.send(JSON.stringify(requestBody));
 		}
 	});
 
 	dom.sendBtn.addEventListener('click', () => {
-		console.log(dom.sendInput.value);
 		if (dom.sendInput.value) {
 			const requestBody = {
 				event: 'message',
-				payload: { nickname: controlNickName.get() },
+				payload: {
+					nickname: controlNickName.get(),
+					message: dom.sendInput.value,
+				},
 			};
+			dom.sendInput.value = '';
 			ws.send(JSON.stringify(requestBody));
 		}
 	});
@@ -47,21 +56,21 @@ function init() {
 		ws = new WebSocket(socketURL);
 
 		ws.onmessage = (serverResponse) => {
-			const { type, payload } = JSON.parse(serverResponse.data);
+			const { type, payload, count } = JSON.parse(serverResponse.data);
 
 			switch (type) {
 				case 'login':
-					controllistUsers.add(payload.nickname);
+					controlListUsers.add(payload.nickname);
+					controlCountUsers.set(count);
 					break;
 				case 'message':
-					console.log(payload.nickname);
-					controllistUsers.buildHtml();
+					controlMessage.send(payload.nickname, payload.message);
 					break;
 			}
 		};
 
-		ws.onclose = () => {
-			alert('test');
+		ws.onclose = (serverResponse) => {
+			//alert('Вышел')
 		};
 	}
 

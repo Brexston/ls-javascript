@@ -13,18 +13,9 @@
     <div class="chat__right">
         <div class="chat__info">
             <div class="chat__info-name">Чат</div>
-            <div class="chat__info-participant"><span>2</span> участника</div>
+            <div class="chat__info-participant"></div>
         </div>
-        <div class="chat__message">
-            <div class="message">
-                <div class="message__text">Привет! <span>17:58</span></div>
-                <div class="message___img"></div>
-            </div>
-            <div class="message">
-                <div class="message__text">Приdsadsвет! <span>17:58</span></div>
-                <div class="message___img"></div>
-            </div>
-        </div>
+        <div class="chat__message"></div>
         <div class="chat__send">
             <input class="chat__send-input" type="text" placeholder="Введите сообщение...">
             <button class="chat__send-btn">Отправить</button>
@@ -166,7 +157,29 @@ body {
   justify-content: flex-end;
 }
 
-.chat__message .message {
+.message {
+  margin-left: auto;
+  display: flex;
+}
+.message:not(:last-child) {
+  margin-bottom: 12px;
+}
+.message__name {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 14px;
+  color: #5387C1;
+  margin-bottom: 8px;
+}
+.message___img {
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  background: #232F3D;
+  margin-right: 10px;
+  margin-top: 22px;
+}
+.chat__message .message__text {
   background: #2B5279;
   width: max-content;
   padding: 8px 10px;
@@ -174,12 +187,9 @@ body {
   line-height: 16px;
   font-size: 14px;
   margin-bottom: 4px;
-  margin-left: auto;
-}
-
-.chat__message .message__text {
   display: flex;
 }
+
 
 .chat__message .message__text span {
   margin-left: 12px;

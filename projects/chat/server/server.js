@@ -8,7 +8,6 @@ const clients = new Set();
 
 wss.on('connection', (wsClient) => {
 	clients.add(wsClient);
-
 	wsClient.on('message', (message) => {
 		const request = JSON.parse(message.toString());
 		broadcast(request);
@@ -20,13 +19,14 @@ wss.on('connection', (wsClient) => {
 
 function broadcast(params) {
 	let response;
-
 	clients.forEach((client) => {
 		switch (params.event) {
 			case 'login':
+				console.log();
 				response = {
 					type: 'login',
 					payload: params.payload,
+					count: clients.size,
 				};
 				break;
 			case 'message':
