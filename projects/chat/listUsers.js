@@ -1,24 +1,18 @@
 export default class ListUsers {
 	constructor() {
 		this.listUsers = document.querySelector('.chat__users-list');
-		this.listUsersArray = new Set();
 	}
 
-	buildHtml() {
-		this.listUsersArray.forEach((user) => {
+	buildHtml(list) {
+		this.listUsers.innerHTML = '';
+		for (const user in list) {
 			const div = document.createElement('div');
 			div.classList.add('chat__user');
-			div.textContent = user;
+			div.textContent = list[user];
 			this.listUsers.appendChild(div);
-		});
+		}
 	}
-
-	add(name) {
-		this.listUsersArray.add(name);
-		this.buildHtml();
-	}
-	remove(name) {
-		this.listUsersArray.add(name);
-		this.buildHtml();
+	update(list) {
+		this.buildHtml(list);
 	}
 }

@@ -5,6 +5,7 @@ const wss = new WebSocket.Server({ port: 4000 }, () => {
 });
 
 const clients = new Set();
+const clientsTest = {};
 
 wss.on('connection', (wsClient) => {
 	clients.add(wsClient);
@@ -12,7 +13,7 @@ wss.on('connection', (wsClient) => {
 		const request = JSON.parse(message.toString());
 		broadcast(request);
 	});
-	wsClient.on('close', () => {
+	wsClient.on('close', (message) => {
 		clients.delete(wsClient);
 	});
 });
@@ -22,10 +23,11 @@ function broadcast(params) {
 	clients.forEach((client) => {
 		switch (params.event) {
 			case 'login':
-				console.log();
+				clientsTest[params.payload.nickname] = params.payload.nickname;
 				response = {
 					type: 'login',
 					payload: params.payload,
+					list: clientsTest,
 					count: clients.size,
 				};
 				break;
@@ -36,9 +38,12 @@ function broadcast(params) {
 				};
 				break;
 			default:
+				//console.log(clientsTest)
+				console.log(params);
 				response = {
 					type: 'logout',
 					payload: params.payload,
+					list: clientsTest,
 				};
 				break;
 		}

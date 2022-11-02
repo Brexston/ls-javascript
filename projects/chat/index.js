@@ -4,9 +4,9 @@ import ListUsers from './listUsers';
 import CountUsers from './countUsers';
 import SendMessage from './sendMessage';
 
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', function () {
 	init();
-};
+});
 
 function init() {
 	let ws;
@@ -56,21 +56,31 @@ function init() {
 		ws = new WebSocket(socketURL);
 
 		ws.onmessage = (serverResponse) => {
-			const { type, payload, count } = JSON.parse(serverResponse.data);
-
+			const { type, payload, count, list } = JSON.parse(serverResponse.data);
 			switch (type) {
 				case 'login':
-					controlListUsers.add(payload.nickname);
+					controlListUsers.update(list);
 					controlCountUsers.set(count);
 					break;
 				case 'message':
 					controlMessage.send(payload.nickname, payload.message);
 					break;
+				case 'logout':
+					console.log(list);
+					console.log(payload);
+					break;
 			}
 		};
 
-		ws.onclose = (serverResponse) => {
-			//alert('Вышел')
+		ws.onclose = () => {
+			const requestBody = {
+				event: 'logout',
+				payload: {
+					nickname: controlNickName.get(),
+				},
+			};
+			ws.send(JSON.stringify(requestBody));
+			ws.close();
 		};
 	}
 
