@@ -4,6 +4,7 @@ import ListUsers from './listUsers';
 import CountUsers from './countUsers';
 import SendMessage from './sendMessage';
 import GenerateName from './generateName';
+import UploadUserPic from './uploadUserPic';
 import NotificationMsg from './NotificationMsg';
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -39,6 +40,7 @@ function init() {
 				},
 			};
 			ws.send(JSON.stringify(requestBody));
+			new UploadUserPic();
 		}
 	});
 
