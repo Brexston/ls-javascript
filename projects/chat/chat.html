@@ -15,6 +15,7 @@
             <div class="chat__info-name">Чат</div>
             <div class="chat__info-participant"></div>
         </div>
+        <div class="chat__notification"></div>
         <div class="chat__message"></div>
         <div class="chat__send">
             <input class="chat__send-input" type="text" placeholder="Введите сообщение...">
@@ -297,5 +298,16 @@ body {
   text-transform: uppercase;
   width: 100%;
   max-width: 132px;
+}
+.chat__notification {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.notification {
+  padding: 8px 0 0;
+  color: rgba(255, 255, 255, 0.3333333333);
+  width: max-content;
 }
 </style>

@@ -4,30 +4,34 @@ const wss = new WebSocket.Server({ port: 4000 }, () => {
 	console.log('Server started');
 });
 
-const clients = new Set();
-const clientsTest = {};
+const clients = new Map();
+const clientsNames = {};
 
 wss.on('connection', (wsClient) => {
-	clients.add(wsClient);
+	clients.set(wsClient, {});
 	wsClient.on('message', (message) => {
 		const request = JSON.parse(message.toString());
 		broadcast(request);
 	});
-	wsClient.on('close', (message) => {
+	wsClient.on('close', (message, reason) => {
 		clients.delete(wsClient);
+		broadcast(message, wsClient.nickname);
 	});
 });
 
-function broadcast(params) {
+function broadcast(params, nickname) {
 	let response;
-	clients.forEach((client) => {
+	for (const client of clients.keys()) {
 		switch (params.event) {
 			case 'login':
-				clientsTest[params.payload.nickname] = params.payload.nickname;
+				clientsNames[params.payload.nickname] = params.payload.nickname;
+				if (!client.nickname) {
+					client.nickname = params.payload.nickname;
+				}
 				response = {
 					type: 'login',
 					payload: params.payload,
-					list: clientsTest,
+					list: clientsNames,
 					count: clients.size,
 				};
 				break;
@@ -38,15 +42,17 @@ function broadcast(params) {
 				};
 				break;
 			default:
-				//console.log(clientsTest)
-				console.log(params);
+				delete clientsNames[nickname];
 				response = {
 					type: 'logout',
 					payload: params.payload,
-					list: clientsTest,
+					list: clientsNames,
+					count: clients.size,
+					name: nickname,
 				};
+
 				break;
 		}
 		client.send(JSON.stringify(response));
-	});
+	}
 }
